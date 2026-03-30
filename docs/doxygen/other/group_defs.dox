@@ -1,0 +1,6 @@
+/*!
+ * \defgroup block GNU Radio JFAB_OOT_BLOCKS C++ Signal Processing Blocks
+ * \brief All C++ blocks that can be used from the JFAB_OOT_BLOCKS GNU Radio
+ *        module are listed here or in the subcategories below.
+ *
+ */

@@ -38,11 +38,13 @@ void bind_repeatableHead(py::module& m)
                gr::basic_block,
                std::shared_ptr<repeatableHead>>(m, "repeatableHead", D(repeatableHead))
 
-        .def(py::init(&repeatableHead::make),
-             py::arg("sizeof_stream_item"),
-             py::arg("nitems"),
-             D(repeatableHead, make))
+          .def(py::init(&repeatableHead::make),
+               py::arg("sizeof_stream_item"),
+               py::arg("nitems"),
+               D(repeatableHead, make))
 
+
+          .def("increase", &repeatableHead::increase, py::arg("nitems"))
 
         ;
 }

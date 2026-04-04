@@ -10,4 +10,5 @@
 # Install public header files
 ########################################################################
 install(FILES api.h
-    repeatableHead.h DESTINATION include/gnuradio/jfab_oot_blocks)
+    repeatableHead.h
+    noiseBandCuda.h DESTINATION include/gnuradio/jfab_oot_blocks)

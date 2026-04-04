@@ -25,7 +25,8 @@ include(GrPybind)
 ########################################################################
 
 list(APPEND jfab_oot_blocks_python_files
-    repeatableHead_python.cc python_bindings.cc)
+    repeatableHead_python.cc
+    noiseBandCuda_python.cc python_bindings.cc)
 
 gr_pybind_make_oot(jfab_oot_blocks ../../.. gr::jfab_oot_blocks "${jfab_oot_blocks_python_files}")
 

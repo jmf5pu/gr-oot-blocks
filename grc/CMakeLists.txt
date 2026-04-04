@@ -7,4 +7,5 @@
 #
 
 install(FILES
-    jfab_oot_blocks_repeatableHead.block.yml DESTINATION share/gnuradio/grc/blocks)
+    jfab_oot_blocks_repeatableHead.block.yml
+    jfab_oot_blocks_noiseBandCuda.block.yml DESTINATION share/gnuradio/grc/blocks)

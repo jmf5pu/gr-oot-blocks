@@ -12,7 +12,8 @@
 include(GrPlatform) #define LIB_SUFFIX
 
 list(APPEND jfab_oot_blocks_sources
-    repeatableHead_impl.cc)
+    repeatableHead_impl.cc
+    noiseBandCuda_impl.cc)
 
 set(jfab_oot_blocks_sources
     "${jfab_oot_blocks_sources}"

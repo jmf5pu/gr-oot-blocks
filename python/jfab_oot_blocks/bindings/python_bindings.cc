@@ -22,6 +22,7 @@ namespace py = pybind11;
 /**************************************/
 // BINDING_FUNCTION_PROTOTYPES(
     void bind_repeatableHead(py::module& m);
+    void bind_noiseBandCuda(py::module& m);
 // ) END BINDING_FUNCTION_PROTOTYPES
 
 
@@ -51,5 +52,6 @@ PYBIND11_MODULE(jfab_oot_blocks_python, m)
     /**************************************/
     // BINDING_FUNCTION_CALLS(
     bind_repeatableHead(m);
+    bind_noiseBandCuda(m);
     // ) END BINDING_FUNCTION_CALLS
 }

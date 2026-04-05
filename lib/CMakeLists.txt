@@ -13,7 +13,10 @@ include(GrPlatform) #define LIB_SUFFIX
 
 list(APPEND jfab_oot_blocks_sources
     repeatableHead_impl.cc
-    noiseBandCuda_impl.cc)
+    noiseBandCuda_impl.cc
+    noiseBand.cu)
+
+find_package(CUDAToolkit REQUIRED)
 
 set(jfab_oot_blocks_sources
     "${jfab_oot_blocks_sources}"
@@ -24,11 +27,19 @@ if(NOT jfab_oot_blocks_sources)
 endif(NOT jfab_oot_blocks_sources)
 
 add_library(gnuradio-jfab_oot_blocks SHARED ${jfab_oot_blocks_sources})
-target_link_libraries(gnuradio-jfab_oot_blocks gnuradio::gnuradio-runtime)
+target_link_libraries(gnuradio-jfab_oot_blocks
+    gnuradio::gnuradio-runtime
+    CUDA::cudart
+    CUDA::curand)
 target_include_directories(
     gnuradio-jfab_oot_blocks
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
-    PUBLIC $<INSTALL_INTERFACE:include>)
+    PUBLIC $<INSTALL_INTERFACE:include>
+    PRIVATE ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
+set_target_properties(gnuradio-jfab_oot_blocks PROPERTIES 
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_STANDARD 11
+)
 set_target_properties(gnuradio-jfab_oot_blocks PROPERTIES DEFINE_SYMBOL "gnuradio_jfab_oot_blocks_EXPORTS")
 
 if(APPLE)

@@ -6,45 +6,45 @@
  */
 
 #include "noiseBandCuda_impl.h"
+
 #include <gnuradio/io_signature.h>
+#include <curand.h>
+#include "noiseBand.cuh"
 
 namespace gr {
 namespace jfab_oot_blocks {
 
-#pragma message("set the following appropriately and remove this warning")
-using output_type = float;
+using output_type = gr_complex;
 noiseBandCuda::sptr noiseBandCuda::make(float ampl, uint64_t seed)
 {
     return gnuradio::make_block_sptr<noiseBandCuda_impl>(ampl, seed);
 }
 
-
-/*
- * The private constructor
- */
 noiseBandCuda_impl::noiseBandCuda_impl(float ampl, uint64_t seed)
     : gr::sync_block("noiseBandCuda",
                      gr::io_signature::make(0, 0, 0),
                      gr::io_signature::make(
-                         1 /* min outputs */, 1 /*max outputs */, sizeof(output_type)))
+                        _num_samples /* min outputs */,
+                        _num_samples /*max outputs */,
+                        sizeof(output_type))),
+      _ampl(ampl)
 {
+    // pin output buffer size for consistency with device memory
+    set_min_output_buffer(_num_samples);
+    set_max_output_buffer(_num_samples);
+    
+    // allocate device memory
+    noise_band_kernel::kernel_setup(_states, _blocks, _tpb, seed);
 }
 
-/*
- * Our virtual destructor.
- */
 noiseBandCuda_impl::~noiseBandCuda_impl() {}
 
 int noiseBandCuda_impl::work(int noutput_items,
                              gr_vector_const_void_star& input_items,
                              gr_vector_void_star& output_items)
 {
-    auto out = static_cast<output_type*>(output_items[0]);
+    //noise_band_kernel::generate_noise(output_items, _ampl, _seed);
 
-#pragma message("Implement the signal processing in your block and remove this warning")
-    // Do <+signal processing+>
-
-    // Tell runtime system how many output items we produced.
     return noutput_items;
 }
 

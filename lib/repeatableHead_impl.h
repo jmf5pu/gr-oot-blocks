@@ -5,8 +5,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef INCLUDED_JFAB_OOT_BLOCKS_REPEATABLEHEAD_IMPL_H
-#define INCLUDED_JFAB_OOT_BLOCKS_REPEATABLEHEAD_IMPL_H
+#pragma once
 
 #include <gnuradio/jfab_oot_blocks/repeatableHead.h>
 
@@ -42,5 +41,3 @@ public:
 
 } // namespace jfab_oot_blocks
 } // namespace gr
-
-#endif /* INCLUDED_JFAB_OOT_BLOCKS_REPEATABLEHEAD_IMPL_H */

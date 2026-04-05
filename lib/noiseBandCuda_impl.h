@@ -5,10 +5,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef INCLUDED_JFAB_OOT_BLOCKS_NOISEBANDCUDA_IMPL_H
-#define INCLUDED_JFAB_OOT_BLOCKS_NOISEBANDCUDA_IMPL_H
+#pragma once
 
 #include <gnuradio/jfab_oot_blocks/noiseBandCuda.h>
+#include <curand_kernel.h>
+#include "noiseBand.cuh"
 
 namespace gr {
 namespace jfab_oot_blocks {
@@ -16,7 +17,11 @@ namespace jfab_oot_blocks {
 class noiseBandCuda_impl : public noiseBandCuda
 {
 private:
-    // Nothing to declare in this block.
+    float _ampl{1.0};
+    int _num_samples{10240};
+    int _tpb{256};
+    int _blocks{(_num_samples + _tpb + 1) / _tpb};
+    curandState* _states;
 
 public:
     noiseBandCuda_impl(float ampl, uint64_t seed);
@@ -30,5 +35,3 @@ public:
 
 } // namespace jfab_oot_blocks
 } // namespace gr
-
-#endif /* INCLUDED_JFAB_OOT_BLOCKS_NOISEBANDCUDA_IMPL_H */

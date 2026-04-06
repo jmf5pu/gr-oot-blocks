@@ -34,7 +34,7 @@ noiseBandCuda_impl::noiseBandCuda_impl(float ampl, uint64_t seed)
     set_max_output_buffer(_num_samples);
     
     // allocate device memory
-    noise_band_kernel::kernel_setup(_states, _blocks, _tpb, seed);
+    noise_band_kernel::kernel_setup(&_states, _num_samples, _blocks, _tpb, seed);
 }
 
 noiseBandCuda_impl::~noiseBandCuda_impl() {}
@@ -43,7 +43,7 @@ int noiseBandCuda_impl::work(int noutput_items,
                              gr_vector_const_void_star& input_items,
                              gr_vector_void_star& output_items)
 {
-    //noise_band_kernel::generate_noise(output_items, _ampl, _seed);
+    noise_band_kernel::kernel_work(output_items, &_states, _ampl);
 
     return noutput_items;
 }

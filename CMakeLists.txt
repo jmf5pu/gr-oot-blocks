@@ -19,6 +19,7 @@ set(CMAKE_BUILD_TYPE
 cmake_minimum_required(VERSION 3.16)
 project(gr-jfab_oot_blocks CXX C)
 enable_testing()
+enable_language(CUDA)
 
 # Install to PyBOMBS target prefix if defined
 if(DEFINED ENV{PYBOMBS_PREFIX})

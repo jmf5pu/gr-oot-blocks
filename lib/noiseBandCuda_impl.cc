@@ -23,27 +23,29 @@ noiseBandCuda::sptr noiseBandCuda::make(float ampl, uint64_t seed)
 noiseBandCuda_impl::noiseBandCuda_impl(float ampl, uint64_t seed)
     : gr::sync_block("noiseBandCuda",
                      gr::io_signature::make(0, 0, 0),
-                     gr::io_signature::make(
-                        _num_samples /* min outputs */,
-                        _num_samples /*max outputs */,
-                        sizeof(output_type))),
-      _ampl(ampl)
+                     gr::io_signature::make(1, 1, sizeof(output_type))),
+      _ampl(ampl),
+      _num_samples(8192),
+      _tpb(256)
 {
-    // pin output buffer size for consistency with device memory
-    set_min_output_buffer(_num_samples);
-    set_max_output_buffer(_num_samples);
+    // Re-calculate blocks here to be safe
+    _blocks = (_num_samples + _tpb - 1) / _tpb;
+
+    set_min_output_buffer(8192);
+    set_max_output_buffer(8192);
     
-    // allocate device memory
-    noise_band_kernel::kernel_setup(&_states, _num_samples, _blocks, _tpb, seed);
+    noise_band_kernel::setup(&_states, _num_samples, _blocks, _tpb, seed);
 }
 
-noiseBandCuda_impl::~noiseBandCuda_impl() {}
+noiseBandCuda_impl::~noiseBandCuda_impl() {
+    noise_band_kernel::cleanup(&_states);
+}
 
 int noiseBandCuda_impl::work(int noutput_items,
                              gr_vector_const_void_star& input_items,
                              gr_vector_void_star& output_items)
 {
-    noise_band_kernel::kernel_work(output_items, &_states, _ampl);
+    noise_band_kernel::work(output_items, &_states, _blocks, _tpb, _num_samples, _ampl);
 
     return noutput_items;
 }

@@ -10,7 +10,7 @@
 
 namespace noise_band_kernel {
 
-void kernel_setup(curandState** states, const int num_samples, const int blocks, const int tpb, const int seed) {
+void setup(curandState** states, const int num_samples, const int blocks, const int tpb, const int seed) {
     size_t states_size = (blocks * tpb) * sizeof(curandState);
 
     gpuErrchk(cudaMalloc((void**)states, states_size));
@@ -19,9 +19,13 @@ void kernel_setup(curandState** states, const int num_samples, const int blocks,
     gpuErrchk(cudaDeviceSynchronize());
 }
 
+void cleanup(curandState** states) {
+    gpuErrchk(cudaFree((void**)states))
+}
 
-void kernel_work(std::vector<void *>& output_items, curandState** states, const int num_samples, float ampl) {
-    generate_noise<<<blocks, tpb>>>(&output_items[0], *states, num_samples, ampl);
+void work(std::vector<void *>& output_items, curandState** states, const int blocks, const int tpb, const int num_samples, float ampl) {
+    float2* out = reinterpret_cast<float2*>(output_items[0]);  // using host buffer bc of shared CPU/GPU memory on jetson
+    generate_noise<<<blocks, tpb>>>(out, *states, num_samples, ampl);
     gpuErrchk(cudaPeekAtLastError());
     gpuErrchk(cudaDeviceSynchronize());
 }
@@ -46,7 +50,7 @@ __global__ void generate_noise(float2* output_items, curandState* states, const 
     // bring state to local register
     curandState state = states[thread_id];
 
-    float2 noise = curand_normal(&state);
+    float2 noise = curand_normal2(&state);
     
     noise.x *= ampl;
     noise.y *= ampl;
@@ -55,11 +59,6 @@ __global__ void generate_noise(float2* output_items, curandState* states, const 
 
     // save state back to global device memory
     states[thread_id] = state;
-}
-
-
-__global__ void destruct_curand() {
-
 }
 
 }

@@ -18,9 +18,9 @@ class noiseBandCuda_impl : public noiseBandCuda
 {
 private:
     float _ampl{1.0};
-    int _num_samples{10240};
+    int _num_samples{8192};
     int _tpb{256};
-    int _blocks{(_num_samples + _tpb + 1) / _tpb};
+    int _blocks{(_num_samples + _tpb - 1) / _tpb};
     curandState* _states;
 
 public:

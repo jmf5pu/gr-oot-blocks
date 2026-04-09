@@ -15,13 +15,7 @@
  */
 
 
-
- static const char *__doc_gr_jfab_oot_blocks_noiseBandCuda = R"doc()doc";
-
-
- static const char *__doc_gr_jfab_oot_blocks_noiseBandCuda_noiseBandCuda_0 = R"doc()doc";
+static const char* __doc_gr_jfab_oot_blocks_noiseBandCuda = R"doc()doc";
 
 
- static const char *__doc_gr_jfab_oot_blocks_noiseBandCuda_make = R"doc()doc";
-
-  
+static const char* __doc_gr_jfab_oot_blocks_noiseBandCuda_make = R"doc()doc";
